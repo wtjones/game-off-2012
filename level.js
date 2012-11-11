@@ -10,7 +10,7 @@ Level.TILE_SIZE = 32;
 
 Level.prototype.getTile = function(x, y) {
   // first look for an actor on the tile
-  var b = Crafty("Blob");
+  var b = Crafty("Derp");
   for (var i = 0; i < b.length; i++) {
     var e = Crafty(b[i]);
     if (e.tilePos.x === x && e.tilePos.y === y) {

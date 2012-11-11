@@ -3,6 +3,8 @@ var TWEEN_FRAMES = 20;
 var blob;
 var tweenCount;
 var lastTurnFrames;
+var derps = [];
+var selectedDerp;
 
 $(document).ready(function() {
 
@@ -10,13 +12,13 @@ $(document).ready(function() {
   Crafty.canvas.init();
 
 
-  Crafty.c("Blob", {
+  Crafty.c("Derp", {
     init: function() {
       this.addComponent("2D, Canvas, Tween, AI, blob1");
          //.attr({x:63, y:63})
       this.bind("TweenEnd", function() {
             console.log("TweenEnd " + this);
-            Crafty.trigger("BlobTweenEnd");
+            Crafty.trigger("DerpTweenEnd");
       });
 
       this.dest = {x: 0, y: 0};
@@ -28,7 +30,7 @@ $(document).ready(function() {
     init: function() {
       this.bind("Turn", function() {
         console.log("Turn!");
-        var b = Crafty("Blob");
+        var b = Crafty("Derp");
 
         tweenCount = 0;
 
@@ -40,7 +42,7 @@ $(document).ready(function() {
 
       });
 
-      this.bind("BlobTweenEnd", function() {
+      this.bind("DerpTweenEnd", function() {
 
         console.log('tweenend tweencount: ' + tweenCount);
         tweenCount -= 1;
@@ -53,27 +55,27 @@ $(document).ready(function() {
       this.bind("KeyDown", function(e) {
         console.log("KeyDown " + e.key);
         if (e.key === 67) {
-          var noWallBlocking = (level.getTile(blob.tilePos.x - 1, blob.tilePos.y) === 0);
-          var hasWallToStand = (level.getTile(blob.tilePos.x - 1, blob.tilePos.y + 1) !== 0);
+          var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === 0);
+          var hasWallToStand = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y + 1) !== 0);
             if (noWallBlocking  && hasWallToStand) {
-            var lastBlob = blob;
-            blob = Crafty.e("Blob")
-              .attr({x: lastBlob.x - Level.TILE_SIZE, y: lastBlob.y})
+            var lastDerp = selectedDerp;
+            selectedDerp = Crafty.e("Derp")
+              .attr({x: lastDerp.x - Level.TILE_SIZE, y: lastDerp.y})
               .attr({
                 tilePos: {
-                  x: lastBlob.tilePos.x - 1,
-                  y: lastBlob.tilePos.y
+                  x: lastDerp.tilePos.x - 1,
+                  y: lastDerp.tilePos.y
                 }
               })
 
-            blob.dest.x = lastBlob.dest.x - Level.TILE_SIZE;
-            blob.dest.y = lastBlob.dest.y;
+            selectedDerp.dest.x = lastDerp.dest.x - Level.TILE_SIZE;
+            selectedDerp.dest.y = lastDerp.dest.y;
 
             tweenCount += 2;
             var frame = Crafty.frame();
             var frames = TWEEN_FRAMES - Crafty.frame() - lastTurnFrames;
             if (frames < 1) frames = 1;
-            blob.tween({x: blob.dest.x, y: blob.dest.y}, frames);
+            selectedDerp.tween({x: selectedDerp.dest.x, y: selectedDerp.dest.y}, frames);
           }
         }
      });
@@ -87,7 +89,7 @@ $(document).ready(function() {
     var actorStart = level.getActorStart();
     level.renderLevel();
 
-    blob = Crafty.e("Blob")
+    selectedDerp = Crafty.e("Derp")
        .attr({x: actorStart.x * Level.TILE_SIZE, y: actorStart.y * Level.TILE_SIZE})
        .attr({tilePos: actorStart});
 
