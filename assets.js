@@ -16,6 +16,10 @@ Assets.load = function(cb) {
      blob1: [4,7]
   });
 
+  Crafty.sprite(32,"data/images/interface.png", {
+     selected: [0,0]
+  });
+
   Crafty.load(["data/images/dungeon.png","data/images/characters.png"], function() {
     cb();
   });

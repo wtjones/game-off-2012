@@ -5,6 +5,7 @@ var tweenCount;
 var lastTurnFrames;
 var derps = [];
 var selectedDerp;
+var selectedBox;
 
 $(document).ready(function() {
 
@@ -20,6 +21,24 @@ $(document).ready(function() {
             console.log("TweenEnd " + this);
             Crafty.trigger("DerpTweenEnd");
       });
+      var self = this;
+      // this.bind("Draw", function() {
+      //   var ctx = Crafty.canvas._canvas.getContext('2d');
+
+      //   ctx.strokeStyle = "rgb(0, 0, 255)";
+      //   ctx.strokeRect(selectedDerp.x+2, selectedDerp.y+2, 30, 30);
+      //   console.log('draw');
+
+      // });
+
+      this.bind("Move", function() {
+        if (self === selectedDerp) {
+        selectedBox.x = self.x;
+        selectedBox.y = self.y;
+      }
+       // selectedBox.x = selectedDerp.x;
+        //selectedBox.y = selectedDerp.y;
+      });
 
       this.dest = {x: 0, y: 0};
       this.tilePos = {x: 0, y: 0};
@@ -30,13 +49,21 @@ $(document).ready(function() {
     init: function() {
       this.bind("Turn", function() {
         console.log("Turn!");
-        var b = Crafty("Derp");
+        //var b = Crafty("Derp");
 
         tweenCount = 0;
 
-        for (var i = 0; i < b.length; i++) {
-          var e = Crafty(b[i]);
-          e.move();
+        derps.sort(function(a, b) {
+          if (a.tilePos.y > b.tilePos.y) {
+            return 1;
+          } else if (a.tilePos.y === b.tilePos.y) {
+            return a.tilePos.x - b.tilePos.y;
+          } else if (a.tilePos.y < b.tilePos.y) {
+            return -1;
+          }
+        });
+        for (var i = 0; i < derps.length; i++) {
+          derps[i].move();
         }
         lastTurnFrames = Crafty.frame();
 
@@ -68,6 +95,7 @@ $(document).ready(function() {
                 }
               })
 
+            derps[derps.length] = selectedDerp;
             selectedDerp.dest.x = lastDerp.dest.x - Level.TILE_SIZE;
             selectedDerp.dest.y = lastDerp.dest.y;
 
@@ -89,9 +117,17 @@ $(document).ready(function() {
     var actorStart = level.getActorStart();
     level.renderLevel();
 
+    selectedBox = Crafty.e("2D, Canvas, selected")
+      .attr({x: 0, y: 0, z: 1});
+
+
     selectedDerp = Crafty.e("Derp")
        .attr({x: actorStart.x * Level.TILE_SIZE, y: actorStart.y * Level.TILE_SIZE})
        .attr({tilePos: actorStart});
+
+    derps[0] = selectedDerp;
+    selectedBox.x = selectedDerp.x;
+    selectedBox.y = selectedDerp.y;
 
     var turnMgr = Crafty.e("TurnMgr");
 

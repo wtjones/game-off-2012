@@ -2,10 +2,11 @@ function Level() {
   this.mapLoader = null;
 }
 
-Level.TILE_WALL = 1;
-Level.TILE_ACTOR = 2;
-Level.TILE_EMPTY = 0;
 Level.TILE_SIZE = 32;
+Level.TILE_EMPTY = 0;
+Level.TILE_WALL = 1;
+Level.TILE_EXIT = 2;
+Level.TILE_ACTOR = 2;
 
 
 Level.prototype.getTile = function(x, y) {
