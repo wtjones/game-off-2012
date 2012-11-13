@@ -41,17 +41,16 @@ $(document).ready(function() {
     init: function() {
       this.bind("Turn", function() {
         console.log("Turn!");
-        //var b = Crafty("Derp");
 
         tweenCount = 0;
 
         derps.sort(function(a, b) {
-          if (a.tilePos.y > b.tilePos.y) {
-            return 1;
-          } else if (a.tilePos.y === b.tilePos.y) {
-            return a.tilePos.x - b.tilePos.y;
-          } else if (a.tilePos.y < b.tilePos.y) {
+          if (a.tilePos.x > b.tilePos.x) {
             return -1;
+          } else if (a.tilePos.x === b.tilePos.x) {
+            return b.tilePos.y - a.tilePos.y;
+          } else if (a.tilePos.x < b.tilePos.x) {
+            return 1;
           }
         });
         console.log('order!');

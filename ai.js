@@ -4,6 +4,7 @@ Crafty.c("AI", {
     var tileY = this.tilePos.y;
 
     if (this.status !== 'dead') {
+      this.lastStatus = this.status;
       if (level.getTile(tileX + 1, tileY) === 0 && level.getTile(tileX, tileY + 1) !== 0) {
         // move right
         this.tilePos.x++;
@@ -12,7 +13,6 @@ Crafty.c("AI", {
 
         tweenCount += 2;
         this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES);
-        this.lastStatus = this.status;
         this.status = 'moving';
       } else if (level.getTile(tileX, tileY + 1) === 0) {
         // move down
@@ -39,8 +39,9 @@ Crafty.c("AI", {
 
         tweenCount += 2;
         this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES)
-        this.lastStatus = this.status;
         this.status = 'climbing';
+      } else {
+        this.status = 'stuck';
       }
     }
     //console.log('move tweencount: ' + tweenCount);
