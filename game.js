@@ -18,30 +18,22 @@ $(document).ready(function() {
       this.addComponent("2D, Canvas, Tween, AI, blob1");
          //.attr({x:63, y:63})
       this.bind("TweenEnd", function() {
-            console.log("TweenEnd " + this);
+            //console.log("TweenEnd " + this);
             Crafty.trigger("DerpTweenEnd");
       });
+
       var self = this;
-      // this.bind("Draw", function() {
-      //   var ctx = Crafty.canvas._canvas.getContext('2d');
-
-      //   ctx.strokeStyle = "rgb(0, 0, 255)";
-      //   ctx.strokeRect(selectedDerp.x+2, selectedDerp.y+2, 30, 30);
-      //   console.log('draw');
-
-      // });
-
       this.bind("Move", function() {
         if (self === selectedDerp) {
-        selectedBox.x = self.x;
-        selectedBox.y = self.y;
-      }
-       // selectedBox.x = selectedDerp.x;
-        //selectedBox.y = selectedDerp.y;
+          selectedBox.x = self.x;
+          selectedBox.y = self.y;
+        }
       });
 
       this.dest = {x: 0, y: 0};
       this.tilePos = {x: 0, y: 0};
+      this.status = '';
+      this.lastStatus = '';
     }
   });
 
@@ -62,7 +54,9 @@ $(document).ready(function() {
             return -1;
           }
         });
+        console.log('order!');
         for (var i = 0; i < derps.length; i++) {
+          console.log('x: ' + derps[i].tilePos.x + ' y: ' + derps[i].tilePos.y);
           derps[i].move();
         }
         lastTurnFrames = Crafty.frame();
@@ -71,10 +65,10 @@ $(document).ready(function() {
 
       this.bind("DerpTweenEnd", function() {
 
-        console.log('tweenend tweencount: ' + tweenCount);
+        //console.log('tweenend tweencount: ' + tweenCount);
         tweenCount -= 1;
         if (tweenCount === 0) {
-          console.log('tweencount is zero, sending turn...');
+          //console.log('tweencount is zero, sending turn...');
           Crafty.trigger("Turn");
         }
       });
