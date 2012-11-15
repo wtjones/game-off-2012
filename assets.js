@@ -8,7 +8,8 @@ Assets.load = function(cb) {
   Crafty.sprite(32,"data/images/dungeon.png", {
      floor: [5,0],
      wall1: [2,1],
-     stairs: [3,1]
+     stairs: [3,1],
+     exit: [19,0]
   });
 
   Crafty.sprite(32,"data/images/characters.png", {

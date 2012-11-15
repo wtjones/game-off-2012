@@ -6,12 +6,12 @@ var lastTurnFrames;
 var derps = [];
 var selectedDerp;
 var selectedBox;
+var escaped;
 
 $(document).ready(function() {
 
   Crafty.init(640,480);
   Crafty.canvas.init();
-
 
   Crafty.c("Derp", {
     init: function() {
@@ -44,6 +44,7 @@ $(document).ready(function() {
 
         tweenCount = 0;
 
+        // sort units from right to left and top to bottom
         derps.sort(function(a, b) {
           if (a.tilePos.x > b.tilePos.x) {
             return -1;
@@ -53,11 +54,42 @@ $(document).ready(function() {
             return 1;
           }
         });
-        console.log('order!');
+
+        // remove exiting units and determine if level is over
+        var active = 0;
+        for (var i = derps.length - 1; i >= 0; i--) {
+          if (derps[i].status !== 'dead' && derps[i].status !== 'stuck') {
+            active++;
+          }
+          if (derps[i].status === 'exiting') {
+            escaped++;
+            if (selectedDerp === derps[i]) {
+              selectedDerp = null;
+            }
+            derps[i].destroy();
+            derps.splice(i, 1);
+          }
+        }
+
+        // if selected unit was removed, reassign it.
+        if (selectedDerp === null) {
+          if (derps.length > 0) {
+            selectedDerp = derps[derps.length - 1];
+            selectedBox.x = selectedDerp.x;
+            selectedBox.y = selectedDerp.y;
+          } else {
+              selectedBox.destroy();
+          }
+        }
+
+        console.log('escapedIndex count ' + escapedIndex.length);
+
+        // apply unit moves
         for (var i = 0; i < derps.length; i++) {
           console.log('x: ' + derps[i].tilePos.x + ' y: ' + derps[i].tilePos.y);
           derps[i].move();
         }
+
         lastTurnFrames = Crafty.frame();
 
       });
@@ -107,12 +139,13 @@ $(document).ready(function() {
   Crafty.scene("main",function() {
     Crafty.background("#000");
 
+    escaped = 0;
+
     var actorStart = level.getActorStart();
     level.renderLevel();
 
     selectedBox = Crafty.e("2D, Canvas, selected")
       .attr({x: 0, y: 0, z: 1});
-
 
     selectedDerp = Crafty.e("Derp")
        .attr({x: actorStart.x * Level.TILE_SIZE, y: actorStart.y * Level.TILE_SIZE})

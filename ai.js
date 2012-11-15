@@ -3,9 +3,23 @@ Crafty.c("AI", {
     var tileX = this.tilePos.x;
     var tileY = this.tilePos.y;
 
-    if (this.status !== 'dead') {
+    if (this.status !== 'dead' && this.status !== 'exit') {
       this.lastStatus = this.status;
-      if (level.getTile(tileX + 1, tileY) === 0 && level.getTile(tileX, tileY + 1) !== 0) {
+
+      if (level.getTile(tileX + 1, tileY) === Level.TILE_EXIT) {
+         // move to exit
+        this.tilePos.x++;
+        this.dest.x = (this.tilePos.x * Level.TILE_SIZE);
+        this.dest.y = this.tilePos.y * Level.TILE_SIZE;
+
+        tweenCount += 2;
+        this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES);
+        this.status = 'exiting';
+      } else if (
+              level.getTile(tileX + 1, tileY) !== Level.TILE_WALL
+              && level.getTile(tileX + 1, tileY) !== Level.TILE_ACTOR
+              && level.getTile(tileX, tileY + 1) !== 0
+      ) {
         // move right
         this.tilePos.x++;
         this.dest.x = (this.tilePos.x * Level.TILE_SIZE);
