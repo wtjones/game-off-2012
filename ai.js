@@ -4,9 +4,17 @@ Crafty.c("AI", {
     var tileY = this.tilePos.y;
 
     if (this.status !== 'dead' && this.status !== 'exit') {
+      this.lastLastStatus = this.lastStatus;
       this.lastStatus = this.status;
 
-      if (level.getTile(tileX + 1, tileY) === Level.TILE_EXIT) {
+      if (this.lastStatus === 'falling'
+          && this.lastLastStatus === 'falling'
+          && level.getTile(tileX, tileY + 1) === Level.TILE_WALL) {
+        // death after falling too far
+        this.status = 'dead';
+        this.removeComponent('unitAlive');
+        this.addComponent('unitDead');
+      } else if (level.getTile(tileX + 1, tileY) === Level.TILE_EXIT) {
          // move to exit
         this.tilePos.x++;
         this.dest.x = (this.tilePos.x * Level.TILE_SIZE);
@@ -15,10 +23,9 @@ Crafty.c("AI", {
         tweenCount += 2;
         this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES);
         this.status = 'exiting';
-      } else if (
-              level.getTile(tileX + 1, tileY) !== Level.TILE_WALL
-              && level.getTile(tileX + 1, tileY) !== Level.TILE_ACTOR
-              && level.getTile(tileX, tileY + 1) !== 0
+      } else if (level.getTile(tileX + 1, tileY) !== Level.TILE_WALL
+                && level.getTile(tileX + 1, tileY) !== Level.TILE_ACTOR
+                && level.getTile(tileX, tileY + 1) !== 0
       ) {
         // move right
         this.tilePos.x++;
@@ -29,13 +36,7 @@ Crafty.c("AI", {
         this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES);
         this.status = 'moving';
       } else if (level.getTile(tileX, tileY + 1) === 0) {
-        // move down
-          this.lastStatus = this.status;
-          if (this.lastStatus === 'falling' && level.getTile(tileX, tileY + 2) === Level.TILE_WALL) {
-            this.status = 'dead';
-          } else {
-            this.status = 'falling';
-          }
+          this.status = 'falling';
           this.dest.x = this.x;
           this.dest.y = this.y + Level.TILE_SIZE;
           this.tilePos.y++;

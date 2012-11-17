@@ -15,7 +15,7 @@ $(document).ready(function() {
 
   Crafty.c("Derp", {
     init: function() {
-      this.addComponent("2D, Canvas, Tween, AI, blob1");
+      this.addComponent("2D, Canvas, Tween, AI, unitAlive");
          //.attr({x:63, y:63})
       this.bind("TweenEnd", function() {
             //console.log("TweenEnd " + this);
@@ -34,6 +34,7 @@ $(document).ready(function() {
       this.tilePos = {x: 0, y: 0};
       this.status = '';
       this.lastStatus = '';
+      this.lastLastStatus = '';
     }
   });
 
@@ -82,7 +83,6 @@ $(document).ready(function() {
           }
         }
 
-        console.log('escapedIndex count ' + escapedIndex.length);
 
         // apply unit moves
         for (var i = 0; i < derps.length; i++) {
