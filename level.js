@@ -3,10 +3,14 @@ function Level() {
 }
 
 Level.TILE_SIZE = 32;
+Level.TILE_ACTOR = -1;
 Level.TILE_EMPTY = 0;
-Level.TILE_WALL = 6;
-Level.TILE_EXIT = 20;
-Level.TILE_ACTOR = 2;
+Level.TILE_WALL = 1;
+Level.TILE_EXIT = 2;
+Level.TILE_SPIKES = 3;
+Level.TILE_ELEVATOR_UP = 4;
+Level.TILE_START = 5;
+
 
 
 Level.prototype.getTile = function(x, y) {
@@ -20,7 +24,7 @@ Level.prototype.getTile = function(x, y) {
   }
 
   //return this.mapLoader.getTile(0, x, y) > 0 ? Level.TILE_WALL : Level.TILE_EMPTY;
-  return this.mapLoader.getTile(0, x, y);
+  return this.mapLoader.getTile(x, y);
 };
 
 
@@ -38,12 +42,15 @@ Level.prototype.renderLevel = function() {
   for (var y = 0; y < mapSize.y; y++) {
     for (var x = 0; x < mapSize.x; x++) {
       var tileType = '';
-      switch (this.mapLoader.getTile(0, x, y)){
+      switch (this.mapLoader.getTile(x, y)){
         case Level.TILE_WALL:
-          tileType = 'floor';
+          tileType = 'wall';
           break;
         case Level.TILE_EXIT:
           tileType = 'exit';
+          break;
+        case Level.TILE_SPIKES:
+          tileType = 'spikes';
           break;
       }
 
@@ -61,7 +68,7 @@ Level.prototype.getActorStart = function() {
 
   for (var y = 0; y < mapSize.y; y++) {
     for (var x = 0; x < mapSize.x; x++) {
-      if (this.mapLoader.getTile(1, x, y) > 0) {
+      if (this.mapLoader.getTile(x, y) === Level.TILE_START) {
         return {x: x, y: y};
       }
     }

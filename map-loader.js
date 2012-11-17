@@ -12,11 +12,11 @@ MapLoader.prototype.loadMap = function(filePath, cb) {
 };
 
 
-MapLoader.prototype.getTile = function(layer, x, y) {
+MapLoader.prototype.getTile = function(x, y) {
   //var map = this.maps[mapDesc];
-  return this.map.layers[layer].data[(y * this.map.layers[layer].width) + x];
+  return this.map.layers[0].data[(y * this.map.layers[0].width) + x];
 };
 
 MapLoader.prototype.getSize = function(layer) {
-  return {x: this.map.layers[layer].width, y: this.map.layers[layer].height};
+  return {x: this.map.layers[0].width, y: this.map.layers[0].height};
 };
