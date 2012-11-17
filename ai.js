@@ -7,10 +7,14 @@ Crafty.c("AI", {
       this.lastLastStatus = this.lastStatus;
       this.lastStatus = this.status;
 
-      if (this.lastStatus === 'falling'
+      var fallingDeath =
+        (this.lastStatus === 'falling'
           && this.lastLastStatus === 'falling'
-          && level.getTile(tileX, tileY + 1) === Level.TILE_WALL) {
-        // death after falling too far
+          && level.getTile(tileX, tileY + 1) === Level.TILE_WALL);
+
+      var spikeDeath = (level.getMapTile(tileX, tileY) === Level.TILE_SPIKES);
+
+      if (fallingDeath || spikeDeath) {
         this.status = 'dead';
         this.removeComponent('unitAlive');
         this.addComponent('unitDead');

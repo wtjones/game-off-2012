@@ -11,8 +11,25 @@ Level.TILE_SPIKES = 3;
 Level.TILE_ELEVATOR_UP = 4;
 Level.TILE_START = 5;
 
+/**
+ * Gets the tile from static map data.
+ * @param  {[type]} x [description]
+ * @param  {[type]} y [description]
+ * @return {[type]}
+ */
+Level.prototype.getMapTile = function(x, y) {
+  var tile = this.mapLoader.getTile(x, y);
+  // ignore special tiles
+  return (tile !== Level.TILE_START) ? tile : Level.TILE_EMPTY;
+};
 
 
+/**
+ * Checks for an actor/mover before looking at map data.
+ * @param  {[type]} x [description]
+ * @param  {[type]} y [description]
+ * @return {[type]}
+ */
 Level.prototype.getTile = function(x, y) {
   // first look for an actor on the tile
   var b = Crafty("Derp");
@@ -23,8 +40,7 @@ Level.prototype.getTile = function(x, y) {
     }
   }
 
-  //return this.mapLoader.getTile(0, x, y) > 0 ? Level.TILE_WALL : Level.TILE_EMPTY;
-  return this.mapLoader.getTile(x, y);
+  return this.getMapTile(x, y);
 };
 
 

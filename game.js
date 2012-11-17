@@ -107,7 +107,8 @@ $(document).ready(function() {
       this.bind("KeyDown", function(e) {
         console.log("KeyDown " + e.key);
         if (e.key === 67) {
-          var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === 0);
+          // clone
+          var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === Level.TILE_EMPTY);
           var hasWallToStand = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y + 1) !== 0);
             if (noWallBlocking  && hasWallToStand) {
             var lastDerp = selectedDerp;
