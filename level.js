@@ -46,7 +46,7 @@ Level.prototype.getTile = function(x, y) {
 
 Level.prototype.loadNextLevel = function(cb) {
   this.mapLoader = new MapLoader();
-  this.mapLoader.loadMap('data/map.json', function(err) {
+  this.mapLoader.loadMap('data/levels/level-1.json', function(err) {
     cb(null);
   });
 }
