@@ -44,11 +44,11 @@ Level.prototype.getTile = function(x, y) {
 };
 
 
-Level.prototype.loadNextLevel = function(cb) {
+Level.prototype.loadLevel = function(level) {
   this.mapLoader = new MapLoader();
-  this.mapLoader.loadMap('data/levels/level-1.json', function(err) {
-    cb(null);
-  });
+  this.mapLoader.loadMap('data/levels/level-' + level + '.json');
+
+  return;
 }
 
 

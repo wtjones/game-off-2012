@@ -1,14 +1,20 @@
 function MapLoader(){}
 
 MapLoader.prototype.map = null;
-MapLoader.prototype.loadMap = function(filePath, cb) {
+MapLoader.prototype.loadMap = function(filePath) {
   $.ajaxSetup({cache: false});
   var self = this;
-  $.getJSON(filePath, function(data) {
-      self.map = data;
-      console.log('gotjson');
-      cb(null);
+
+  $.ajax({
+    url: filePath,
+    dataType: 'json',
+    async: false,
+    success: function(data) {
+        self.map = data;
+        console.log('gotjson');
+    }
   });
+
 };
 
 

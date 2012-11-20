@@ -1,22 +1,51 @@
 var level = new Level();
 var TWEEN_FRAMES = 20;
-var blob;
 var tweenCount;
+var turnFrames;
 var lastTurnFrames;
-var derps = [];
+var derps;
 var selectedDerp;
 var selectedBox;
 var escaped;
+var turnMgr;
+var currentLevel;
 
 $(document).ready(function() {
 
   Crafty.init(640,480);
   Crafty.canvas.init();
 
+  turnMgr = Crafty.e("TurnMgr");
+  currentLevel = 1;
+//   Crafty.scene("main", function() {
+
+//     var b = Crafty("Derp");
+//     for (var i = 0; i < b.length; i++) {
+//       var e = Crafty(b[i]);
+//       e.destroy();
+//     }
+//     if (typeof selectedBox !== 'undefined') {
+//       selectedBox.destroy();
+//     }
+
+// Crafty.scene("level");
+
+//   });
+  Crafty.bind("LevelLose", function() {
+    Crafty.scene("main");
+  });
+
+  Crafty.bind("LevelWin", function() {
+    currentLevel++;
+    Crafty.scene("main");
+  });
+
   Crafty.scene("main",function() {
     Crafty.background("#000");
 
+    level.loadLevel(currentLevel);
     escaped = 0;
+    derps = [];
 
     var actorStart = level.getActorStart();
     level.renderLevel();
@@ -32,9 +61,9 @@ $(document).ready(function() {
     selectedBox.x = selectedDerp.x;
     selectedBox.y = selectedDerp.y;
 
-    var turnMgr = Crafty.e("TurnMgr");
-
     // start first turn
+    console.log('triggering a turn!');
+    initialTurnHandled = false;
     Crafty.trigger("Turn");
   });
 
@@ -42,12 +71,11 @@ $(document).ready(function() {
 
   Crafty.scene("loading", function() {
     Assets.load(function() {
-      level.loadNextLevel(function(err) {
-        console.log('loaded a level!');
-        Crafty.scene("main");
-      });
+
+      Crafty.scene("main");
     });
   });
+
 
   Crafty.scene("loading");
 
