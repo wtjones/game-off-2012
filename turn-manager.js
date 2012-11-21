@@ -25,7 +25,9 @@ Crafty.c("TurnMgr", {
           if (selectedDerp === derps[i]) {
             selectedDerp = null;
           }
+          var deleteUnit = derps[i];
           derps.splice(i, 1);
+          deleteUnit.destroy();
         }
       }
 
