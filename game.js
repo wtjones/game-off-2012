@@ -16,27 +16,14 @@ $(document).ready(function() {
   Crafty.canvas.init();
 
   turnMgr = Crafty.e("TurnMgr");
-  currentLevel = 1;
-//   Crafty.scene("main", function() {
 
-//     var b = Crafty("Derp");
-//     for (var i = 0; i < b.length; i++) {
-//       var e = Crafty(b[i]);
-//       e.destroy();
-//     }
-//     if (typeof selectedBox !== 'undefined') {
-//       selectedBox.destroy();
-//     }
-
-// Crafty.scene("level");
-
-//   });
   Crafty.bind("LevelLose", function() {
+    console.log ('levelLose');
     Crafty.scene("main");
   });
 
   Crafty.bind("LevelWin", function() {
-    currentLevel++;
+    level.setNextLevel();
     Crafty.scene("main");
   });
 
@@ -68,10 +55,14 @@ $(document).ready(function() {
   });
 
 
-
   Crafty.scene("loading", function() {
     Assets.load(function() {
-
+      var skipToLevel = getParameterByName('startlevel');
+      if (jQuery.isNumeric(skipToLevel)) {
+        level.setLevel(skipToLevel);
+      } else {
+        level.setLevel(1);
+      }
       Crafty.scene("main");
     });
   });

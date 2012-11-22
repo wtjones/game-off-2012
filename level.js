@@ -1,5 +1,6 @@
 function Level() {
   this.mapLoader = null;
+  this.currentLevel = 1;
 }
 
 Level.TILE_SIZE = 32;
@@ -44,13 +45,27 @@ Level.prototype.getTile = function(x, y) {
 };
 
 
+
 Level.prototype.loadLevel = function(level) {
   this.mapLoader = new MapLoader();
-  this.mapLoader.loadMap('data/levels/level-' + level + '.json');
+  this.mapLoader.loadMap('data/levels/level-' + this.currentLevel + '.json');
 
   return;
-}
+};
 
+Level.prototype.setLevel = function(level) {
+  this.currentLevel = level;
+  this.loadLevel();
+};
+
+Level.prototype.setNextLevel = function() {
+  this.currentLevel++;
+  this.loadLevel();
+};
+
+Level.prototype.getLevel = function() {
+  return this.currentLevel;
+};
 
 Level.prototype.renderLevel = function() {
   var mapSize = this.mapLoader.getSize(0);
