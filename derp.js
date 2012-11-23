@@ -20,5 +20,6 @@ Crafty.c("Derp", {
       this.status = '';
       this.lastStatus = '';
       this.lastLastStatus = '';
+      this.ridingTile;
     }
   });

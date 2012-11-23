@@ -3,14 +3,20 @@ function Level() {
   this.currentLevel = 1;
 }
 
+
 Level.TILE_SIZE = 32;
 Level.TILE_ACTOR = -1;
 Level.TILE_EMPTY = 0;
+
+// tiles from editor are 1-based
 Level.TILE_WALL = 1;
-Level.TILE_EXIT = 2;
-Level.TILE_SPIKES = 3;
-Level.TILE_ELEVATOR_UP = 4;
-Level.TILE_START = 5;
+Level.TILE_EXIT_OPEN = 6;
+Level.TILE_EXIT_CLOSED = 7;
+Level.TILE_ELEVATOR_UP = 11;
+Level.TILE_ELEVATOR_DOWN = 12;
+Level.TILE_SPIKES = 16;
+
+Level.TILE_START = 21;
 
 /**
  * Gets the tile from static map data.
@@ -19,9 +25,15 @@ Level.TILE_START = 5;
  * @return {[type]}
  */
 Level.prototype.getMapTile = function(x, y) {
-  var tile = this.mapLoader.getTile(x, y);
-  // ignore special tiles
-  return (tile !== Level.TILE_START) ? tile : Level.TILE_EMPTY;
+  var size = this.mapLoader.getSize();
+  // treat out of bounds as a wall;
+  if (x < 0 || y < 0 || x > size.x || y > size.y) {
+    return Level.TILE_WALL;
+  } else {
+   var tile = this.mapLoader.getTile(x, y);
+    // ignore special tiles
+    return (tile !== Level.TILE_START) ? tile : Level.TILE_EMPTY;
+  }
 };
 
 
@@ -77,8 +89,17 @@ Level.prototype.renderLevel = function() {
         case Level.TILE_WALL:
           tileType = 'wall';
           break;
-        case Level.TILE_EXIT:
-          tileType = 'exit';
+        case Level.TILE_EXIT_CLOSED:
+          tileType = 'exitClosed';
+          break;
+        case Level.TILE_EXIT_OPEN:
+          tileType = 'exitOpen';
+          break;
+        case Level.TILE_ELEVATOR_UP:
+          tileType = 'elevatorUp';
+          break;
+        case Level.TILE_ELEVATOR_DOWN:
+          tileType = 'ElevatorDown';
           break;
         case Level.TILE_SPIKES:
           tileType = 'spikes';
@@ -87,7 +108,7 @@ Level.prototype.renderLevel = function() {
 
       if (tileType !== '') {
         Crafty.e("2D, Canvas, " + tileType)
-          .attr({x: x * 32, y: y * 32 });
+          .attr({x: x * 32, y: y * 32, tilePos: {x: x, y: y} });
       }
     }
   }

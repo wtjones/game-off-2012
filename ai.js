@@ -1,5 +1,5 @@
 Crafty.c("AI", {
-  move: function() {
+  moveTurn: function() {
     var tileX = this.tilePos.x;
     var tileY = this.tilePos.y;
 
@@ -13,12 +13,25 @@ Crafty.c("AI", {
           && level.getTile(tileX, tileY + 1) === Level.TILE_WALL);
 
       var spikeDeath = (level.getMapTile(tileX, tileY) === Level.TILE_SPIKES);
+      if (this.status === 'riding') {
+        // follow platform
+        this.dest.x = this.x;
+        if (this.ridingTile.direction === 'down') {
+          this.dest.y = this.y + Level.TILE_SIZE;
+          this.tilePos.y++;
 
-      if (fallingDeath || spikeDeath) {
+          this.tween({x: this.x, y: this.y + Level.TILE_SIZE}, TWEEN_FRAMES)
+        } else {
+          this.dest.y = this.y - Level.TILE_SIZE;
+          this.tilePos.y--;
+
+          this.tween({x: this.x, y: this.y - Level.TILE_SIZE}, TWEEN_FRAMES)
+        }
+      } else if (fallingDeath || spikeDeath) {
         this.status = 'dead';
         this.removeComponent('unitAlive');
         this.addComponent('unitDead');
-      } else if (level.getTile(tileX + 1, tileY) === Level.TILE_EXIT) {
+      } else if (level.getTile(tileX + 1, tileY) === Level.TILE_EXIT_OPEN) {
          // move to exit
         this.tilePos.x++;
         this.dest.x = (this.tilePos.x * Level.TILE_SIZE);
@@ -29,7 +42,9 @@ Crafty.c("AI", {
         this.status = 'exiting';
       } else if (level.getTile(tileX + 1, tileY) !== Level.TILE_WALL
                 && level.getTile(tileX + 1, tileY) !== Level.TILE_ACTOR
-                && level.getTile(tileX, tileY + 1) !== 0
+                && level.getTile(tileX + 1, tileY) !== Level.TILE_ELEVATOR_DOWN
+                && (level.getTile(tileX, tileY + 1) !== 0
+                    || level.getTile(tileX, tileY + 1) != Level.TILE_ELEVATOR_DOWN)
       ) {
         // move right
         this.tilePos.x++;
