@@ -3,8 +3,9 @@ Crafty.c("TurnMgr", {
     this.bind("Turn", function(source) {
       tweenCount = 0;
       turnFrames = 0;
-      // sort units from right to left and top to bottom
-      derps.sort(function(a, b) {
+
+      // sort function for units and movers
+      var tileSort =function(a, b) {
         if (a.tilePos.x > b.tilePos.x) {
           return -1;
         } else if (a.tilePos.x === b.tilePos.x) {
@@ -12,7 +13,21 @@ Crafty.c("TurnMgr", {
         } else if (a.tilePos.x < b.tilePos.x) {
           return 1;
         }
-      });
+      };
+
+
+      // sort units from right to left and top to bottom
+      derps.sort(tileSort);
+
+      // put all movers in an array
+      var movers = [];
+
+      var moversTemp = Crafty("ElevatorDown");
+      for (var i = 0; i < moversTemp.length; i++) {
+        movers[movers.length] = Crafty(moversTemp[i]);
+      }
+
+      movers.sort(tileSort);
 
       // remove exiting units and determine if level is over
       var active = 0;
@@ -42,10 +57,8 @@ Crafty.c("TurnMgr", {
       }
 
       // move non-unit movers
-      var movers = Crafty("ElevatorDown");
       for (var i = 0; i < movers.length; i++) {
-        var e = Crafty(movers[i]);
-        e.moveTurn();
+        movers[i].moveTurn();
       }
 
       // if selected unit was removed, reassign it.
