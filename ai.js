@@ -40,12 +40,8 @@ Crafty.c("AI", {
         tweenCount += 2;
         this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES);
         this.status = 'exiting';
-      } else if (level.getTile(tileX + 1, tileY) !== Level.TILE_WALL
-                && level.getTile(tileX + 1, tileY) !== Level.TILE_ACTOR
-                && level.getTile(tileX + 1, tileY) !== Level.TILE_ELEVATOR_DOWN
-                && (level.getTile(tileX, tileY + 1) !== 0
-                    || level.getTile(tileX, tileY + 1) != Level.TILE_ELEVATOR_DOWN)
-      ) {
+        } else if ((level.getTile(tileX + 1, tileY) === Level.TILE_EMPTY || level.getTile(tileX + 1, tileY) === Level.TILE_SPIKES)
+                && level.getTile(tileX, tileY + 1) !== Level.TILE_EMPTY) {
         // move right
         this.tilePos.x++;
         this.dest.x = (this.tilePos.x * Level.TILE_SIZE);

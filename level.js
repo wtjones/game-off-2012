@@ -31,8 +31,9 @@ Level.prototype.getMapTile = function(x, y) {
     return Level.TILE_WALL;
   } else {
    var tile = this.mapLoader.getTile(x, y);
-    // ignore special tiles
-    return (tile !== Level.TILE_START) ? tile : Level.TILE_EMPTY;
+    // ignore special tiles and movers
+    return (tile !== Level.TILE_START
+      && tile !== Level.TILE_ELEVATOR_DOWN) ? tile : Level.TILE_EMPTY;
   }
 };
 
@@ -50,6 +51,14 @@ Level.prototype.getTile = function(x, y) {
     var e = Crafty(b[i]);
     if (e.tilePos.x === x && e.tilePos.y === y) {
       return Level.TILE_ACTOR;
+    }
+  }
+
+  var b = Crafty("ElevatorDown");
+  for (var i = 0; i < b.length; i++) {
+    var e = Crafty(b[i]);
+    if (e.tilePos.x === x && e.tilePos.y === y) {
+      return Level.TILE_ELEVATOR_DOWN;
     }
   }
 
