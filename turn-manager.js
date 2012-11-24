@@ -41,6 +41,13 @@ Crafty.c("TurnMgr", {
         return;
       }
 
+      // move non-unit movers
+      var movers = Crafty("ElevatorDown");
+      for (var i = 0; i < movers.length; i++) {
+        var e = Crafty(movers[i]);
+        e.moveTurn();
+      }
+
       // if selected unit was removed, reassign it.
       if (selectedDerp === null) {
         if (derps.length > 0) {
@@ -55,8 +62,8 @@ Crafty.c("TurnMgr", {
 
       // apply unit moves
       for (var i = 0; i < derps.length; i++) {
-        console.log('x: ' + derps[i].tilePos.x + ' y: ' + derps[i].tilePos.y);
-        derps[i].move();
+        //console.log('x: ' + derps[i].tilePos.x + ' y: ' + derps[i].tilePos.y);
+        derps[i].moveTurn();
       }
       lastTurnFrames = Crafty.frame();
     }); // Turn
