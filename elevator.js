@@ -1,3 +1,6 @@
+/**
+ * Base component for ElevatorUp/ElevatorDown
+ */
 Crafty.c("Elevator", {
   init: function() {
     this.addComponent("2D, Canvas, Tween");
@@ -13,6 +16,28 @@ Crafty.c("Elevator", {
     this.lastStatus = '';
     this.lastLastStatus = '';
     //this.standingUnit;
+  },
+  /**
+   * When mover has reached the end, set status of mover and rider.
+   * @return {[type]} [description]
+   */
+  endRide: function() {
+    var tileX = this.tilePos.x;
+    var tileY = this.tilePos.y;
+
+    // Elevator can no longer move. Reset the status of the rider.
+    this.status = 'end';
+
+    // reset the status of the standing unit
+    var standingUnit;
+    for (var i = 0; i < derps.length; i ++) {
+      if (derps[i].tilePos.x === tileX && derps[i].tilePos.y + 1 === tileY) {
+        standingUnit = derps[i];
+      }
+    }
+    standingUnit.lastlastStatus = standingUnit.lastStatus;
+    standingUnit.lastStatus = standingUnit.status;
+    standingUnit.status = '';
   },
   moveTurn: function() {
     var tileX = this.tilePos.x;
@@ -93,17 +118,18 @@ Crafty.c("Elevator", {
 
           this.tween({x: this.tilePos.x * Level.TILE_SIZE, y: this.tilePos.y * Level.TILE_SIZE}, TWEEN_FRAMES)
         } else {
-          // Elevator can no longer move. Reset the status of the rider.
-          this.status = 'end';
+          this.endRide();
+        }
+      } else {
+        // look at tile above the rider
+        if (level.getTile(tileX, tileY - 2) === Level.TILE_EMPTY) {
 
-          // reset the status of the standing unit
-          var standingUnit;
-          for (var i = 0; i < derps.length; i ++) {
-            if (derps[i].tilePos.x === tileX && derps[i].tilePos.y + 1 === tileY) {
-              standingUnit = derps[i];
-            }
-          }
-          standingUnit.status = '';
+          this.dest.y = this.y - Level.TILE_SIZE;
+          this.tilePos.y--;
+
+          this.tween({x: this.tilePos.x * Level.TILE_SIZE, y: this.tilePos.y * Level.TILE_SIZE}, TWEEN_FRAMES)
+        } else {
+          this.endRide();
         }
       }
     }
@@ -116,5 +142,11 @@ Crafty.c("ElevatorDown", {
     this.addComponent("Elevator, elevatorDown");
     this.direction = 'down';
   },
+});
 
+Crafty.c("ElevatorUp", {
+  init: function() {
+    this.addComponent("Elevator, elevatorUp");
+    this.direction = 'up';
+  },
 });

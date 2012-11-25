@@ -27,6 +27,11 @@ Crafty.c("TurnMgr", {
         movers[movers.length] = Crafty(moversTemp[i]);
       }
 
+      moversTemp = Crafty("ElevatorUp");
+      for (var i = 0; i < moversTemp.length; i++) {
+        movers[movers.length] = Crafty(moversTemp[i]);
+      }
+
       movers.sort(tileSort);
 
       // remove exiting units and determine if level is over

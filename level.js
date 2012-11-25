@@ -33,7 +33,8 @@ Level.prototype.getMapTile = function(x, y) {
    var tile = this.mapLoader.getTile(x, y);
     // ignore special tiles and movers
     return (tile !== Level.TILE_START
-      && tile !== Level.TILE_ELEVATOR_DOWN) ? tile : Level.TILE_EMPTY;
+      && tile !== Level.TILE_ELEVATOR_DOWN
+      && tile !== Level.TILE_ELEVATOR_UP) ? tile : Level.TILE_EMPTY;
   }
 };
 
@@ -46,7 +47,8 @@ Level.prototype.getMapTile = function(x, y) {
  */
 Level.prototype.getTile = function(x, y) {
   // first look for an actor on the tile
-  var b = Crafty("Derp");
+  var b
+  b = Crafty("Derp");
   for (var i = 0; i < b.length; i++) {
     var e = Crafty(b[i]);
     if (e.tilePos.x === x && e.tilePos.y === y) {
@@ -54,11 +56,19 @@ Level.prototype.getTile = function(x, y) {
     }
   }
 
-  var b = Crafty("ElevatorDown");
+  b = Crafty("ElevatorDown");
   for (var i = 0; i < b.length; i++) {
     var e = Crafty(b[i]);
     if (e.tilePos.x === x && e.tilePos.y === y) {
       return Level.TILE_ELEVATOR_DOWN;
+    }
+  }
+
+  b = Crafty("ElevatorUp");
+  for (var i = 0; i < b.length; i++) {
+    var e = Crafty(b[i]);
+    if (e.tilePos.x === x && e.tilePos.y === y) {
+      return Level.TILE_ELEVATOR_UP;
     }
   }
 
@@ -105,7 +115,7 @@ Level.prototype.renderLevel = function() {
           tileType = 'exitOpen';
           break;
         case Level.TILE_ELEVATOR_UP:
-          tileType = 'elevatorUp';
+          tileType = 'ElevatorUp';
           break;
         case Level.TILE_ELEVATOR_DOWN:
           tileType = 'ElevatorDown';
