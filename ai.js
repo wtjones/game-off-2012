@@ -10,7 +10,7 @@ Crafty.c("AI", {
       var fallingDeath =
         (this.lastStatus === 'falling'
           && this.lastLastStatus === 'falling'
-          && level.getTile(tileX, tileY + 1) === Level.TILE_WALL);
+          && level.getTile(tileX, tileY + 1) !== Level.TILE_EMPTY);
 
       var spikeDeath = (level.getMapTile(tileX, tileY) === Level.TILE_SPIKES);
       if (this.status === 'riding') {
