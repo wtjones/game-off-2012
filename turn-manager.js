@@ -4,15 +4,16 @@ Crafty.c("TurnMgr", {
     this.bind("EnterFrame", this.handleEnterFrame);
     this.bind("Turn", this.handleTurn);
 
-
     this.bind("KeyDown", function(e) {
       console.log("KeyDown " + e.key);
       switch (e.key) {
         case 67:
-          // clone
+          // clone action
+          var validStatus = (selectedDerp.status === '' or selectedDerp.status === 'moving');
           var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === Level.TILE_EMPTY);
           var hasWallToStand = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y + 1) !== 0);
-            if (noWallBlocking  && hasWallToStand) {
+
+          if (noWallBlocking  && hasWallToStand && validStatus) {
             var lastDerp = selectedDerp;
             selectedDerp = Crafty.e("Derp")
               .attr({x: lastDerp.x - Level.TILE_SIZE, y: lastDerp.y})
