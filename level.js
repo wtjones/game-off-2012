@@ -12,6 +12,7 @@ Level.TILE_EMPTY = 0;
 Level.TILE_WALL = 1;
 Level.TILE_EXIT_OPEN = 6;
 Level.TILE_EXIT_CLOSED = 7;
+Level.TILE_FLOOR_SWITCH = 8;
 Level.TILE_ELEVATOR_UP = 11;
 Level.TILE_ELEVATOR_DOWN = 12;
 Level.TILE_SPIKES = 16;
@@ -72,6 +73,17 @@ Level.prototype.getTile = function(x, y) {
     }
   }
 
+  b = Crafty("Exit");
+  for (var i = 0; i < b.length; i++) {
+    var e = Crafty(b[i]);
+    if (e.tilePos.x === x && e.tilePos.y === y) {
+      if (e.status === 'open') {
+        return Level.TILE_EXIT_OPEN;
+      } else {
+        return Level.TILE_EXIT_CLOSED;
+      }
+    }
+  }
   return this.getMapTile(x, y);
 };
 
@@ -109,10 +121,13 @@ Level.prototype.renderLevel = function() {
           tileType = 'wall';
           break;
         case Level.TILE_EXIT_CLOSED:
-          tileType = 'exitClosed';
+          tileType = 'Exit';
           break;
         case Level.TILE_EXIT_OPEN:
-          tileType = 'exitOpen';
+          tileType = 'Exit';
+          break;
+        case Level.TILE_FLOOR_SWITCH:
+          tileType = 'FloorSwitch';
           break;
         case Level.TILE_ELEVATOR_UP:
           tileType = 'ElevatorUp';
@@ -126,8 +141,12 @@ Level.prototype.renderLevel = function() {
       }
 
       if (tileType !== '') {
-        Crafty.e("2D, Canvas, " + tileType)
+        var newE = Crafty.e("2D, Canvas, " + tileType)
           .attr({x: x * 32, y: y * 32, tilePos: {x: x, y: y} });
+        // set door status
+        if (this.mapLoader.getTile(x, y) === Level.TILE_EXIT_CLOSED) newE.close();
+        if (this.mapLoader.getTile(x, y) === Level.TILE_EXIT_OPEN) newE.open();
+
       }
     }
   }

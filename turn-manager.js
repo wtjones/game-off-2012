@@ -113,6 +113,14 @@ Crafty.c("TurnMgr", {
         return;
       }
 
+
+      // process turns for switches
+      var switches = Crafty("FloorSwitch");
+      for (var i = 0; i < switches.length; i++) {
+        var e = Crafty(switches[i]);
+        e.doTurn();
+      }
+
       // move non-unit movers
       for (var i = 0; i < movers.length; i++) {
         movers[i].moveTurn();

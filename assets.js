@@ -8,6 +8,7 @@ Assets.load = function(cb) {
        wall: [0, 0],
        exitOpen: [0, 1],
        exitClosed: [1, 1],
+       floorSwitch: [2, 1],
        elevatorUp: [0, 2],
        elevatorDown: [1, 2],
        spikes: [0, 3],
