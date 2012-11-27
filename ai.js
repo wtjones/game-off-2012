@@ -50,7 +50,7 @@ Crafty.c("AI", {
         tweenCount += 2;
         this.tween({x: this.dest.x, y: this.dest.y}, TWEEN_FRAMES);
         this.status = 'moving';
-      } else if (level.getTile(tileX, tileY + 1) === 0) {
+      } else if (level.getTile(tileX, tileY + 1) === Level.TILE_EMPTY) {
           this.status = 'falling';
           this.dest.x = this.x;
           this.dest.y = this.y + Level.TILE_SIZE;

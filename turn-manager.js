@@ -1,11 +1,60 @@
 Crafty.c("TurnMgr", {
   init: function() {
-    this.bind("Turn", function(source) {
+    this.disable = true;
+    this.bind("EnterFrame", this.handleEnterFrame);
+    this.bind("Turn", this.handleTurn);
+
+
+    this.bind("KeyDown", function(e) {
+      console.log("KeyDown " + e.key);
+      switch (e.key) {
+        case 67:
+          // clone
+          var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === Level.TILE_EMPTY);
+          var hasWallToStand = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y + 1) !== 0);
+            if (noWallBlocking  && hasWallToStand) {
+            var lastDerp = selectedDerp;
+            selectedDerp = Crafty.e("Derp")
+              .attr({x: lastDerp.x - Level.TILE_SIZE, y: lastDerp.y})
+              .attr({
+                tilePos: {
+                  x: lastDerp.tilePos.x - 1,
+                  y: lastDerp.tilePos.y
+                }
+              })
+
+            derps[derps.length] = selectedDerp;
+            selectedDerp.dest.x = lastDerp.dest.x - Level.TILE_SIZE;
+            selectedDerp.dest.y = lastDerp.dest.y;
+
+            var frames = TWEEN_FRAMES - Crafty.frame() - lastTurnFrames;
+            if (frames < 1) frames = 1;
+            selectedDerp.tween({x: selectedDerp.dest.x, y: selectedDerp.dest.y}, frames);
+          }
+          break;
+        case 82:
+          Crafty.trigger("LevelReset");
+          this.reset();
+          return;
+          break;
+      }
+   });
+  },
+  handleEnterFrame: function() {
+    if (this.disable) return;
+
+    turnFrames++;
+
+    if (turnFrames === TWEEN_FRAMES) {
+      Crafty.trigger("Turn", "frames");
+    }
+  },
+  handleTurn: function() {
       tweenCount = 0;
       turnFrames = 0;
-
+      this.disable = false;
       // sort function for units and movers
-      var tileSort =function(a, b) {
+      var tileSort = function(a, b) {
         if (a.tilePos.x > b.tilePos.x) {
           return -1;
         } else if (a.tilePos.x === b.tilePos.x) {
@@ -52,11 +101,13 @@ Crafty.c("TurnMgr", {
       }
 
       if (escaped > 1) {
+        this.reset();
         Crafty.trigger("LevelLose");
         return;
       }
 
       if (escaped === 1 && active === 0) {
+        this.reset();
         Crafty.trigger("LevelWin");
         return;
       }
@@ -84,42 +135,10 @@ Crafty.c("TurnMgr", {
         derps[i].moveTurn();
       }
       lastTurnFrames = Crafty.frame();
-    }); // Turn
+    }, // Turn
 
-    this.bind("EnterFrame", function() {
-
-      turnFrames++;
-      if (turnFrames === TWEEN_FRAMES) {
-        Crafty.trigger("Turn", "frames");
-      }
-    });
-
-    this.bind("KeyDown", function(e) {
-      console.log("KeyDown " + e.key);
-      if (e.key === 67) {
-        // clone
-        var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === Level.TILE_EMPTY);
-        var hasWallToStand = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y + 1) !== 0);
-          if (noWallBlocking  && hasWallToStand) {
-          var lastDerp = selectedDerp;
-          selectedDerp = Crafty.e("Derp")
-            .attr({x: lastDerp.x - Level.TILE_SIZE, y: lastDerp.y})
-            .attr({
-              tilePos: {
-                x: lastDerp.tilePos.x - 1,
-                y: lastDerp.tilePos.y
-              }
-            })
-
-          derps[derps.length] = selectedDerp;
-          selectedDerp.dest.x = lastDerp.dest.x - Level.TILE_SIZE;
-          selectedDerp.dest.y = lastDerp.dest.y;
-
-          var frames = TWEEN_FRAMES - Crafty.frame() - lastTurnFrames;
-          if (frames < 1) frames = 1;
-          selectedDerp.tween({x: selectedDerp.dest.x, y: selectedDerp.dest.y}, frames);
-        }
-      }
-   });
+  reset: function() {
+    this.disable = true;
+    //this.unbind("EnterFrame", this.handleEnterFrame);
   }
 });
