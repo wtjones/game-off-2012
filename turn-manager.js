@@ -9,7 +9,7 @@ Crafty.c("TurnMgr", {
       switch (e.key) {
         case 67:
           // clone action
-          var validStatus = (selectedDerp.status === '' or selectedDerp.status === 'moving');
+          var validStatus = (selectedDerp.status === '' || selectedDerp.status === 'moving');
           var noWallBlocking = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y) === Level.TILE_EMPTY);
           var hasWallToStand = (level.getTile(selectedDerp.tilePos.x - 1, selectedDerp.tilePos.y + 1) !== 0);
 
