@@ -1,10 +1,14 @@
 Crafty.c("Derp", {
     init: function() {
-      this.addComponent("2D, Canvas, Tween, AI, unitAlive");
-         //.attr({x:63, y:63})
+      this.addComponent("2D, Canvas, Tween, Mouse, AI, unitAlive");
       this.bind("TweenEnd", function() {
-            //console.log("TweenEnd " + this);
-            Crafty.trigger("DerpTweenEnd");
+        Crafty.trigger("DerpTweenEnd");
+      });
+
+      this.bind("Click", function() {
+        selectedDerp = this;
+        selectedBox.x = self.x;
+        selectedBox.y = self.y;
       });
 
       var self = this;
