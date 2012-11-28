@@ -1,6 +1,22 @@
 function Level() {
   this.mapLoader = null;
   this.currentLevel = 1;
+
+  // load level manifest
+  $.ajaxSetup({cache: false});
+  var self = this;
+
+  $.ajax({
+    url: 'data/levels.json',
+    dataType: 'json',
+    async: false,
+    success: function(data) {
+        self.manifest = data;
+        console.log(data);
+        console.log(self.manifest[0].fileName);
+    }
+  });
+
 }
 
 
@@ -89,9 +105,11 @@ Level.prototype.getTile = function(x, y) {
 
 
 
-Level.prototype.loadLevel = function(level) {
+Level.prototype.loadLevel = function() {
   this.mapLoader = new MapLoader();
-  this.mapLoader.loadMap('data/levels/level-' + this.currentLevel + '.json');
+  var fileName = this.manifest[this.currentLevel - 1].fileName;
+  //this.mapLoader.loadMap('data/levels/level-' + this.currentLevel + '.json');
+  this.mapLoader.loadMap('data/levels/' + fileName);
 
   return;
 };
@@ -108,6 +126,10 @@ Level.prototype.setNextLevel = function() {
 
 Level.prototype.getLevel = function() {
   return this.currentLevel;
+};
+
+Level.prototype.getCaption = function() {
+  return this.manifest[this.currentLevel - 1].caption;
 };
 
 Level.prototype.renderLevel = function() {
