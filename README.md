@@ -3,6 +3,8 @@
 
 Created for [github/game-off-2012](https://github.com/github/game-off-2012)
 
+![screenshot](http://wtjones.github.com/game-off-2012/data/media/screen1.png)
+
 ### Overview
 
 Each level begins with a single unit ("derp"). It will continue to move to the right without regard for safety. The level is won if one **and only one** unit exits the level.
