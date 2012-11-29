@@ -19,7 +19,9 @@ function Level() {
 
 }
 
-
+//
+// static constants
+//
 Level.TILE_SIZE = 32;
 Level.TILE_ACTOR = -1;
 Level.TILE_EMPTY = 0;
@@ -126,6 +128,10 @@ Level.prototype.setNextLevel = function() {
 
 Level.prototype.getLevel = function() {
   return this.currentLevel;
+};
+
+Level.prototype.getMaxLevel = function() {
+  return this.manifest.length;
 };
 
 Level.prototype.getCaption = function() {

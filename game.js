@@ -51,7 +51,23 @@ $(document).ready(function() {
   Crafty.bind("LevelWin", function() {
     // not sure why it thinks getLevel() returns a string
     var goLevel = (level.getLevel() * 1) + 1;
-    navigateToLevel(goLevel);
+    if (goLevel >= level.getMaxLevel()) {
+      var dialog = Crafty.e("HTML")
+        .attr({
+          x: Crafty.canvas._canvas.getContext('2d').canvas.width / 2 - 150,
+          y: Crafty.canvas._canvas.getContext('2d').canvas.height / 2 - 50, w:300, h:100})
+        .append("<div style='border:2px solid;border-radius:5px;background-color:black;color:white;'><center>Congrats! You finished all the levels.<br>Press a key to start again.</center></div>");
+
+      var goodJob = function(e) {
+        this.unbind("KeyDown", goodJob);
+        navigateToLevel(1);
+      };
+
+      this.bind("KeyDown", goodJob);
+    } else {
+      navigateToLevel(goLevel);
+    }
+
     //level.setNextLevel();
     //Crafty.scene("main");
   });
@@ -85,24 +101,24 @@ $(document).ready(function() {
       .attr({
         x: Crafty.canvas._canvas.getContext('2d').canvas.width / 2 - 150,
         y: Crafty.canvas._canvas.getContext('2d').canvas.height / 2 - 50, w:300, h:100})
-      .append("<div style='border:2px solid;border-radius:5px;background-color:black;color:white;'><center><i>\"" + caption + "\"</i><br><br>To win, only one unit may exit.<br>Press space bar to begin.</center></div>");
+      .append("<div style='border:2px solid;border-radius:5px;background-color:black;color:white;'><center><i>\"" + caption + "\"</i><br><br>To win, only one unit may exit.<br>Press a key to begin.</center></div>");
 
     var id;
     var startGame = function(e) {
       this.unbind("KeyDown", startGame);
       console.log("KeyDown " + e.key);
-      if (e.key === 32) {
-        dialog.destroy();
-        this.unbind("KeyDown", id);
-        var resetNotice = Crafty.e("HTML")
-        .attr({
-          x: Crafty.canvas._canvas.getContext('2d').canvas.width / 2 - 300,
-          y: Crafty.canvas._canvas.getContext('2d').canvas.height - 20, w:600, h:20})
-        .append("<div style='background-color:black;color:white;'><center>Press c to clone selected unit. Click to change selected unit. Press r to reset level.</center></div>");
 
-        console.log('triggering a turn!');
-        Crafty.trigger("Turn");
-      };
+      dialog.destroy();
+      this.unbind("KeyDown", id);
+      var resetNotice = Crafty.e("HTML")
+      .attr({
+        x: Crafty.canvas._canvas.getContext('2d').canvas.width / 2 - 300,
+        y: Crafty.canvas._canvas.getContext('2d').canvas.height - 20, w:600, h:20})
+      .append("<div style='background-color:black;color:white;'><center>Press c to clone selected unit. Click to change selected unit. Press r to reset level.</center></div>");
+
+      console.log('triggering a turn!');
+      Crafty.trigger("Turn");
+
     };
     this.bind("KeyDown", startGame);
     //});
