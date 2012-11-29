@@ -48,6 +48,7 @@ Specific levels can be accessed by specifying 'startlevel' in the query string. 
 * jQuery
 * Paint.NET
 * Sublime Text 2
+* Tiled Map Editor
 * [random-generator.com](http://random-generator.com/index.php?title=Castle) (for level names)
 
 ### License (graphics)
