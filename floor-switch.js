@@ -8,15 +8,19 @@ Crafty.c("FloorSwitch", {
     this.standingUnit = null;
   },
   doTurn: function() {
+    var hasUnit = false;
     for (var i = 0; i < derps.length; i++) {
       if (this.tilePos.x === derps[i].tilePos.x && this.tilePos.y === derps[i].tilePos.y) {
+        hasUnit = true;
         if (this.standingUnit !== derps[i]) {
           this.standingUnit = derps[i];
+          hasUnit = true;
           Crafty.trigger("FloorSwitchAction");
         }
-      } else {
-        this.standingUnit = null;
       }
+    }
+    if (!hasUnit) {
+      this.standingUnit = null;
     }
   }
 });
