@@ -112,9 +112,9 @@ $(document).ready(function() {
 
   Crafty.scene("loading", function() {
     Assets.load(function() {
-      var skipToLevel = (getParameterByName('startlevel') * 1);
+      var skipToLevel = getParameterByName('startlevel');
       if (jQuery.isNumeric(skipToLevel)) {
-        level.setLevel(skipToLevel);
+        level.setLevel(skipToLevel * 1);
       } else {
         level.setLevel(1);
       }
