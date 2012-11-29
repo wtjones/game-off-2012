@@ -5,6 +5,10 @@ Crafty.c("Exit", {
     this.dest = {x: 0, y: 0};
     this.tilePos = {x: 0, y: 0};
     this.status = '';
+
+    this.bind("FloorSwitchAction", function() {
+       if (this.status === 'closed') this.open();
+    });
   },
   open: function() {
     this.status = 'open';

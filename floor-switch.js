@@ -9,11 +9,7 @@ Crafty.c("FloorSwitch", {
   doTurn: function() {
     for (var i = 0; i < derps.length; i++) {
       if (this.tilePos.x === derps[i].tilePos.x && this.tilePos.y === derps[i].tilePos.y) {
-        b = Crafty("Exit");
-        for (var i = 0; i < b.length; i++) {
-          var e = Crafty(b[i]);
-          if (e.status === 'closed') e.open();
-        }
+        Crafty.trigger("FloorSwitchAction");
       }
     }
   }
