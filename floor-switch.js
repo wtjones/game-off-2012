@@ -5,11 +5,17 @@ Crafty.c("FloorSwitch", {
     this.direction = '';
     this.dest = {x: 0, y: 0};
     this.tilePos = {x: 0, y: 0};
+    this.standingUnit = null;
   },
   doTurn: function() {
     for (var i = 0; i < derps.length; i++) {
       if (this.tilePos.x === derps[i].tilePos.x && this.tilePos.y === derps[i].tilePos.y) {
-        Crafty.trigger("FloorSwitchAction");
+        if (this.standingUnit !== derps[i]) {
+          this.standingUnit = derps[i];
+          Crafty.trigger("FloorSwitchAction");
+        }
+      } else {
+        this.standingUnit = null;
       }
     }
   }

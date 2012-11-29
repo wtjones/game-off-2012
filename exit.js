@@ -7,7 +7,7 @@ Crafty.c("Exit", {
     this.status = '';
 
     this.bind("FloorSwitchAction", function() {
-       if (this.status === 'closed') this.open();
+       if (this.status === 'closed') this.open(); else this.close();
     });
   },
   open: function() {
