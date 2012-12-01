@@ -2,8 +2,8 @@
 #### Only one may exit. Unfortunately, all you can do is clone more of them.
 
 Created for [github/game-off-2012](https://github.com/github/game-off-2012)
-
-![screenshot](http://wtjones.github.com/game-off-2012/data/media/screen1.png)
+screenshot
+![](http://wtjones.github.com/game-off-2012/data/media/screen1.png)
 
 ### Overview
 
@@ -50,7 +50,7 @@ Specific levels can be accessed by specifying 'startlevel' in the query string. 
 * jQuery
 * Paint.NET
 * Sublime Text 2
-* Tiled Map Editor
+* [Tiled Map Editor](http://www.mapeditor.org/)
 * [random-generator.com](http://random-generator.com/index.php?title=Castle) (for level names)
 
 ### License (graphics)
