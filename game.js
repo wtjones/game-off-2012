@@ -51,7 +51,7 @@ $(document).ready(function() {
   Crafty.bind("LevelWin", function() {
     // not sure why it thinks getLevel() returns a string
     var goLevel = (level.getLevel() * 1) + 1;
-    if (goLevel >= level.getMaxLevel()) {
+    if (goLevel > level.getMaxLevel()) {
       var dialog = Crafty.e("HTML")
         .attr({
           x: Crafty.canvas._canvas.getContext('2d').canvas.width / 2 - 150,
